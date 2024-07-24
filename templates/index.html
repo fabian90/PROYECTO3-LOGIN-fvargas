@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Heladería</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Menú de la Heladería</h1>
+
+    {% if error %}
+        <div class="error-message">
+            <p>{{ error }}</p>
+        </div>
+    {% else %}
+        <table>
+            <thead>
+                <tr>
+
+                    {% if usuario.username %} 
+                    <strong> 
+                            Session Users :{{usuario.username}}
+                        {% else %}
+                            Session Users : Invitado 
+                        {% endif %}
+                    </strong> 
+
+                </tr>
+               
+                <tr>
+                    <th>Nombre</th>
+                    <th>Tipo</th>
+                    <th>Precio</th>
+                    {% if usuario.username %}  
+                    <th>Calorías</th>
+                    {% endif %}
+                    {% if usuario.is_admin %}  
+                    <th>Costo de Producción</th>                  
+                    <th>Rentabilidad</th>
+                    {% endif %}
+                    {% if usuario.username or usuario.is_admin or usuario.es_empleado%}  
+                    <th>Es Sano</th>
+                    {% endif %}
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for producto in productos %}
+                <tr>
+                    <td>{{ producto.nombre }}</td>
+                    <td>{{ producto.tipo_producto }}</td>
+                    <td>{{ producto.precio_publico }}</td>
+                    {% if usuario.username %}  
+                    <td>{{ producto.calorias_totales }}</td>
+                    {% endif %}
+                    {% if usuario.is_admin %}  
+                    <td>{{ producto.costo_produccion }}</td>
+                    <td>{{ producto.rentabilidad }}</td>
+                    {% endif %}
+                    {% if usuario.username or usuario.is_admin or usuario.es_empleado  %}  
+                    <td>{{ 'Sí' if producto.es_sano else 'No' }}</td>
+                    {% endif %} 
+                    <td>
+                        {% if usuario.username or usuario.is_admin or usuario.es_empleado%}  
+                        <form action="{{ url_for('heladeria.vender_producto', producto_id=producto.id) }}" method="post">
+                            <button type="submit">Vender</button>
+                        </form>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+    {% if usuario.is_admin %}  
+    <h2>Producto más rentable: {{ producto_mas_rentable }}</h2>
+    {% endif %}
+    {% if usuario.is_admin or usuario.es_empleado %}  
+    <h2>Abastecer Ingrediente</h2>
+    <form action="{{ url_for('heladeria.abastecer_ingrediente') }}" method="post">
+        <label for="ingrediente_id">ID Ingrediente:</label>
+        <input type="number" id="ingrediente_id" name="ingrediente_id" required>
+        <label for="cantidad">Cantidad:</label>
+        <input type="number" id="cantidad" name="cantidad" required>
+        <button type="submit">Abastecer</button>
+    </form>
+    <h2>Renovar Inventario de Complementos</h2>
+    <form action="{{ url_for('heladeria.renovar_inventario_complementos') }}" method="post">
+        <button type="submit">Renovar Inventario</button>
+    </form>
+    {% endif %}
+</body>
+</html>
