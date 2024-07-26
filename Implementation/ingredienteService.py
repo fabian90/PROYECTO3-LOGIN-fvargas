@@ -39,6 +39,9 @@ class IngredienteService(IIngrediente):
     
     def get_by_complemento(self,name):
           return Ingrediente.query.filter_by(tipo=name).all()
-        
+    def get_all_ingredientes(self):
+        return Ingrediente.query.all()
+    def get_ingrediente_by_nombre(self,name):
+        return Ingrediente.query.filter_by(nombre=name).all()
              
     

@@ -19,3 +19,7 @@ class IIngrediente(ABC):
     @abstractmethod
     def get_by_complemento(self,name):
         pass
+    def get_all_ingredientes(self):
+        pass
+    def get_ingrediente_by_nombre(self,name):
+        pass

@@ -182,3 +182,85 @@ class HeladeriaController:
     def get_ventas_del_dia(self):
         """Devuelve el total de ventas del día."""
         return self.ventas_del_dia
+    def consultar_producto_por_id(self, producto_id):
+        """Consulta un producto según su ID."""
+        try:
+            producto = self.producto_service.get_producto(producto_id)
+            if producto:
+                return producto
+            return None
+        except Exception as e:
+            print(f"Error al consultar el producto por ID: {e}")
+            return None
+
+    def consultar_producto_por_nombre(self, nombre):
+        """Consulta un producto según su nombre."""
+        try:
+            producto = self.producto_service.get_by_name(nombre)
+            if producto:
+                return producto
+            return None
+        except Exception as e:
+            print(f"Error al consultar el producto por nombre: {e}")
+            return None
+
+    def consultar_ingredientes(self):
+        """Consulta todos los ingredientes."""
+        try:
+            ingredientes = self.ingrediente_service.get_all_ingredientes()
+            return ingredientes
+        except Exception as e:
+            print(f"Error al consultar los ingredientes: {e}")
+            return []
+
+    def consultar_ingrediente_por_id(self, ingrediente_id):
+        """Consulta un ingrediente según su ID."""
+        try:
+            ingrediente = self.ingrediente_service.get_ingrediente(ingrediente_id)
+            if ingrediente:
+                return ingrediente
+            return None
+        except Exception as e:
+            print(f"Error al consultar el ingrediente por ID: {e}")
+            return None
+
+    def consultar_ingrediente_por_nombre(self, nombre):
+        """Consulta un ingrediente según su nombre."""
+        try:
+            ingrediente = self.ingrediente_service.get_ingrediente_by_nombre(nombre)
+            if ingrediente:
+                return ingrediente
+            return None
+        except Exception as e:
+            print(f"Error al consultar el ingrediente por nombre: {e}")
+            return None
+
+    def reabastecer_producto(self, producto_id, cantidad):
+        """Reabastece un producto según su ID."""
+        try:
+            producto = self.producto_service.get_producto(producto_id)
+            if producto:
+                producto.inventario += cantidad
+                self.producto_service.update_producto(producto)
+                db.session.commit()
+                return True
+            return False
+        except Exception as e:
+            print(f"Error al reabastecer el producto: {e}")
+            return False
+
+    def renovar_inventario_producto(self, producto_id, cantidad):
+        """Renueva el inventario de un producto según su ID."""
+        try:
+            productos = self.producto_ingrediente_service.get_producto_ingrediente_by_producto_id(producto_id)
+            if productos:  # Corrección: comprobar si 'productos' no está vacío
+                for producto in productos:
+                    ingrediente = self.ingrediente_service.get_ingrediente(producto.id_ingrediente)
+                    if ingrediente:  # Asegurarse de que el ingrediente fue encontrado
+                        self.ingrediente_service.update_ingrediente(ingrediente.id, inventario=ingrediente.inventario + cantidad)
+                db.session.commit()
+                return True
+            return False
+        except Exception as e:
+            print(f"Error al renovar el inventario del producto: {e}")
+            return False

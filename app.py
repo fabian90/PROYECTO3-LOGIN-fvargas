@@ -53,9 +53,9 @@ with app.app_context():
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
-    if request.method == 'GET':
-        return render_template("login.html")
-    else:
+    if request.method == 'POST':
+    #     return render_template("login.html")
+    # else:
         username = request.form['username']
         password = request.form['password']
         user = User.query.filter_by(username=username, password=password).first()
@@ -63,8 +63,7 @@ def login():
 
             login_user(user)
             return redirect(url_for('heladeria.index'))
-
-        
+        return render_template('no_autorizado.html')       
     return render_template("login.html")
 
 # api.add_resource(Controlador,'/consulta_nombre')

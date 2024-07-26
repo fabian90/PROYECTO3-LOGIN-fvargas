@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>No Autorizado</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+            background-color: #f8f9fa;
+        }
+        .container {
+            border: 1px solid #ced4da;
+            padding: 20px;
+            border-radius: 5px;
+            background-color: #ffffff;
+            display: inline-block;
+        }
+        .message {
+            font-size: 18px;
+            color: #495057;
+        }
+        .back-link {
+            display: block;
+            margin-top: 20px;
+            color: #007bff;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <p class="message">No autorizado. Debes iniciar sesión para acceder a esta página.</p>
+        <a href="{{ url_for('login') }}" class="back-link">Volver a iniciar sesión</a>
+    </div>
+</body>
+</html>

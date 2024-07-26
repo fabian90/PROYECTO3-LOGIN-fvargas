@@ -35,4 +35,4 @@ class ProductoService(IProducto):
             db.session.commit()
         return producto
     def get_by_name(self,name):
-          return Producto.query.filter_by(name=name).all()
+          return Producto.query.filter_by(nombre=name).all()
